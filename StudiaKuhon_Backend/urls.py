@@ -7,11 +7,11 @@ from disign_shop.TelegramOrder import OrderView
 
 router = routers.DefaultRouter()
 router.register(r'products', ProductViewSet, basename='products')
-router.register(r'styles', StyleViewSet, basename='products')
-router.register(r'materials', MaterialViewSet, basename='products')
-router.register(r'palettes', PaletteViewSet, basename='products')
-router.register(r'photos', PhotoViewSet, basename='products')
-router.register(r'handles', HandleViewSet, basename='products')
+router.register(r'styles', StyleViewSet, basename='style')
+router.register(r'materials', MaterialViewSet, basename='materials')
+router.register(r'palettes', PaletteViewSet, basename='palettes')
+router.register(r'photos', PhotoViewSet, basename='photos')
+router.register(r'handles', HandleViewSet, basename='handles')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

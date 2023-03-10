@@ -71,13 +71,24 @@ WSGI_APPLICATION = 'StudiaKuhon_Backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'StudiaKuhon',
+#         'USER': 'koros',
+#         'PASSWORD': '0803',
+#         'HOST': 'localhost',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'StudiaKuhon',
-        'USER': 'postgres',
+        'USER': 'koros',
         'PASSWORD': '0803',
-        'HOST': 'localhost',
+        'HOST': 'db',
+        'PORT': 5432
     }
 }
 
