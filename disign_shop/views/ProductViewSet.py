@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
@@ -32,8 +32,3 @@ class ProductViewSet(viewsets.ModelViewSet):
         related_data = serializer.data
         related_data["related"] = related
         return Response(related_data)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)

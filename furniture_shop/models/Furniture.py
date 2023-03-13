@@ -1,7 +1,7 @@
 from django.db import models
-from Category import Category
-from FurniturePhoto import FurniturePhoto
-from FurnitureColor import FurnitureColor
+from .Category import Category
+from .FurniturePhoto import FurniturePhoto
+from .FurnitureColor import FurnitureColor
 
 
 class Furniture(models.Model):
@@ -14,7 +14,7 @@ class Furniture(models.Model):
     # partition part
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     gallery = models.ManyToManyField(FurniturePhoto)
-    colors = models.ManyToManyField(FurnitureColor, through='Availability')
+    colors = models.ManyToManyField(FurnitureColor, through='ColorAvailability')
 
     # utility part
     time_created = models.DateTimeField(auto_now_add=True)
@@ -25,7 +25,7 @@ class Furniture(models.Model):
         return self.title
 
 
-class Availability(models.Model):
-    furniture = models.ForeignKey(Furniture)
-    color = models.ForeignKey(FurnitureColor)
+class ColorAvailability(models.Model):
+    furniture = models.ForeignKey(Furniture, on_delete=models.CASCADE)
+    color = models.ForeignKey(FurnitureColor, on_delete=models.CASCADE)
     availability = models.BooleanField()

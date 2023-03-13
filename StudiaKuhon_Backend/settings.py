@@ -3,16 +3,16 @@ from decouple import config
 from pathlib import Path
 
 # Telegram token
-TOKEN = config('token')
+TOKEN = os.getenv('telegram_token')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEV", 1)
 
 ALLOWED_HOSTS = ['*']
 
@@ -97,11 +97,11 @@ WSGI_APPLICATION = 'StudiaKuhon_Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("DB_NAME"),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PSW'),
-        'HOST': 'localhost',
-        'PORT': os.getenv('DB_POST')
+        'NAME': os.getenv("DB_NAME", 'StudiaKuhon'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
 }
 

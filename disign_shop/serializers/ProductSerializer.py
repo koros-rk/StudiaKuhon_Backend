@@ -33,7 +33,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'title', 'description_shorted', 'description_full', 'main_photo', 'thumbnail_photo', 'gallery',
-                  'styles', 'colours', 'materials', 'handle', 'main_colour', 'main_style', 'main_material',)
+                  'styles', 'colors', 'materials', 'handle', 'main_colour', 'main_style', 'main_material',)
 
     def create(self, validated_data):
 
@@ -46,7 +46,7 @@ class ProductSerializer(serializers.ModelSerializer):
             handle=Handle.objects.get(title=validated_data['handle']['title']),
             main_style=Style.objects.get(title=validated_data['main_style']['title']),
             main_material=Material.objects.get(title=validated_data['main_material']['title']),
-            main_colour=Palette.objects.get(title=validated_data['main_colour']['title']),
+            main_colour=Palette.objects.get(title=validated_data['main_color']['title']),
             show=True
         )
 
@@ -62,7 +62,7 @@ class ProductSerializer(serializers.ModelSerializer):
             material_obj = Material.objects.get(title=material['title'])
             new_product.materials.add(material_obj)
 
-        for color in validated_data['colours']:
+        for color in validated_data['colors']:
             color_obj = Palette.objects.get(title=color['title'])
             new_product.colours.add(color_obj)
 
@@ -93,7 +93,7 @@ class ProductSerializer(serializers.ModelSerializer):
                             instance.gallery.add(Photo.objects.get_or_create(url=v))
                         case 'styles':
                             instance.styles.add(Style.objects.get(title=v))
-                        case 'colours':
+                        case 'colors':
                             instance.colours.add(Palette.objects.get(title=v))
                         case 'materials':
                             instance.materials.add(Material.objects.get(title=v))
