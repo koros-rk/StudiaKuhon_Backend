@@ -33,7 +33,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'title', 'description_shorted', 'description_full', 'main_photo', 'thumbnail_photo', 'gallery',
-                  'styles', 'colors', 'materials', 'handle', 'main_colour', 'main_style', 'main_material',)
+                  'styles', 'colours', 'materials', 'handle', 'main_colour', 'main_style', 'main_material',)
 
     def create(self, validated_data):
 
@@ -90,7 +90,7 @@ class ProductSerializer(serializers.ModelSerializer):
                 for k, v in i.items():
                     match attr:
                         case 'gallery':
-                            instance.gallery.add(Photo.objects.get_or_create(url=v))
+                            instance.gallery.add(Photo.objects.get_or_create(url=v)[0].id)
                         case 'styles':
                             instance.styles.add(Style.objects.get(title=v))
                         case 'colors':
