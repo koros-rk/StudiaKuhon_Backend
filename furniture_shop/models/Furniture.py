@@ -1,4 +1,6 @@
 from django.db import models
+from slugify import slugify
+
 from .Category import Category
 from .FurniturePhoto import FurniturePhoto
 from .FurnitureColor import FurnitureColor
@@ -7,6 +9,11 @@ from .FurnitureColor import FurnitureColor
 class Furniture(models.Model):
     # main part
     title = models.CharField(max_length=100)
+
+    @property
+    def slug(self):
+        return slugify(self.title)
+
     description = models.CharField(max_length=200)
     main_photo = models.URLField(max_length=500)
     thumbnail_photo = models.URLField(max_length=500)

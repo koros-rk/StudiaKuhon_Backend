@@ -13,7 +13,7 @@ class FurnitureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Furniture
-        fields = ('id', 'title', 'description', 'main_photo', 'thumbnail_photo', 'price', 'category', 'gallery', 'colors', 'time_created', 'time_updated', 'show')
+        fields = ('id', 'title', 'slug', 'description', 'main_photo', 'thumbnail_photo', 'price', 'category', 'gallery', 'colors', 'time_created', 'time_updated', 'show')
 
     def create(self, validated_data):
 

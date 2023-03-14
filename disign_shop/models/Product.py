@@ -1,4 +1,6 @@
 from django.db import models
+from slugify import slugify
+
 from .Photo import Photo
 from .Style import Style
 from .Handle import Handle
@@ -13,6 +15,10 @@ class Product(models.Model):
     description_full = models.TextField()
     main_photo = models.URLField(max_length=500)
     thumbnail_photo = models.URLField(max_length=500)
+
+    @property
+    def slug(self):
+        return slugify(self.title)
 
     # partition part
     gallery = models.ManyToManyField(Photo)
