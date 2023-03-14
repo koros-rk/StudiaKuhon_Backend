@@ -10,6 +10,7 @@ class Furniture(models.Model):
     description = models.CharField(max_length=200)
     main_photo = models.URLField(max_length=500)
     thumbnail_photo = models.URLField(max_length=500)
+    price = models.IntegerField(default=1)
 
     # partition part
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
