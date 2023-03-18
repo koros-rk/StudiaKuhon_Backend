@@ -18,13 +18,18 @@ class Furniture(models.Model):
     main_photo = models.URLField(max_length=500)
     thumbnail_photo = models.URLField(max_length=500)
     price = models.IntegerField(default=1)
+    width = models.IntegerField(default=1)
+    height = models.IntegerField(default=1)
+    depth = models.IntegerField(default=1)
 
     # partition part
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     gallery = models.ManyToManyField(FurniturePhoto)
     colors = models.ManyToManyField(FurnitureColor, through='ColorAvailability')
 
     # utility part
+    availability = models.BooleanField(default=False)
     time_created = models.DateTimeField(auto_now_add=True)
     time_updated = models.DateTimeField(auto_now=True)
     show = models.BooleanField(default=True)
@@ -34,6 +39,6 @@ class Furniture(models.Model):
 
 
 class ColorAvailability(models.Model):
-    furniture = models.ForeignKey(Furniture, on_delete=models.CASCADE)
-    color = models.ForeignKey(FurnitureColor, on_delete=models.CASCADE)
+    furniture = models.ForeignKey(Furniture, on_delete=models.PROTECT)
+    color = models.ForeignKey(FurnitureColor, on_delete=models.PROTECT)
     availability = models.BooleanField()

@@ -23,16 +23,11 @@ class Product(models.Model):
     # partition part
     gallery = models.ManyToManyField(Photo)
     styles = models.ManyToManyField(Style)
-    colours = models.ManyToManyField(Palette)
+    colors = models.ManyToManyField(Palette)
     materials = models.ManyToManyField(Material)
     handle = models.ForeignKey(Handle, on_delete=models.CASCADE)
-
-    main_colour = models.ForeignKey(Palette, on_delete=models.CASCADE, related_name="color", verbose_name="main_color",
-                                    null=True)
     main_style = models.ForeignKey(Style, on_delete=models.CASCADE, related_name="style", verbose_name="main_style",
                                    null=True)
-    main_material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="material",
-                                      verbose_name="main_material", null=True)
 
     # utility part
     time_created = models.DateTimeField(auto_now_add=True)

@@ -1,4 +1,4 @@
 from .FurnitureSerializer import FurnitureSerializer
 from .FurniturePhotoSerializer import FurniturePhotoSerializer
-from .FurnitureColorSerializer import FurnitureColorSerializer
+from .FurnitureColorSerializer import FurnitureColorSerializer, ColorAvailabilitySerializer
 from .CategorySerializer import CategorySerializer

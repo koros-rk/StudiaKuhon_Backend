@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.utils import model_meta
 
 from ..models import *
 from .StyleSerializer import StyleSerializer
@@ -12,28 +11,24 @@ from .PaletteSerializer import PaletteSerializer
 class ProductSerializer(serializers.ModelSerializer):
     obj_dict = {
         'handle': Handle.objects,
-        'main_colour': Palette.objects,
         'main_style': Style.objects,
-        'main_material': Material.objects,
         'gallery': Photo.objects,
-        'colours': Palette.objects,
+        'colors': Palette.objects,
         'styles': Style.objects,
         'materials': Material.objects,
     }
 
     gallery = PhotoSerializer(many=True)
     styles = StyleSerializer(many=True)
-    colours = PaletteSerializer(many=True)
+    colors = PaletteSerializer(many=True)
     materials = MaterialSerializer(many=True)
     handle = HandleSerializer()
-    main_colour = PaletteSerializer()
     main_style = StyleSerializer()
-    main_material = MaterialSerializer()
 
     class Meta:
         model = Product
         fields = ('id', 'title', 'slug', 'description_shorted', 'description_full', 'main_photo', 'thumbnail_photo', 'gallery',
-                  'styles', 'colours', 'materials', 'handle', 'main_colour', 'main_style', 'main_material',)
+                  'styles', 'colors', 'materials', 'handle', 'main_style',)
 
     def create(self, validated_data):
 
@@ -45,8 +40,6 @@ class ProductSerializer(serializers.ModelSerializer):
             thumbnail_photo=validated_data['thumbnail_photo'],
             handle=Handle.objects.get(title=validated_data['handle']['title']),
             main_style=Style.objects.get(title=validated_data['main_style']['title']),
-            main_material=Material.objects.get(title=validated_data['main_material']['title']),
-            main_colour=Palette.objects.get(title=validated_data['main_colour']['title']),
             show=True
         )
 
@@ -62,7 +55,7 @@ class ProductSerializer(serializers.ModelSerializer):
             material_obj = Material.objects.get(title=material['title'])
             new_product.materials.add(material_obj)
 
-        for color in validated_data['colours']:
+        for color in validated_data['colors']:
             color_obj = Palette.objects.get(title=color['title'])
             new_product.colours.add(color_obj)
 
@@ -71,31 +64,47 @@ class ProductSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def update(self, instance, validated_data):
-        info = model_meta.get_field_info(instance)
+        updated_gallery_data = validated_data.pop('gallery', [])
+        updated_style_data = validated_data.pop('styles', [])
+        updated_colors_data = validated_data.pop('colors', [])
+        updated_materials_data = validated_data.pop('materials', [])
+        updated_handle_data = validated_data.pop('handle', [])
+        updated_main_style_data = validated_data.pop('main_style', [])
 
-        m2m_fields = []
-        for attr, value in validated_data.items():
-            if attr in info.relations and info.relations[attr].to_many:
-                m2m_fields.append((attr, value))
-            elif attr in info.relations:
-                for k, v in value.items():
-                    setattr(instance, attr, self.obj_dict[attr].get(title=v))
-            else:
-                setattr(instance, attr, value)
+        instance.gallery.all().delete()
+        instance.styles.clear()
+        instance.colors.clear()
+        instance.materials.clear()
+
+        instance = super().update(instance, validated_data)
+
+        new_gallery = []
+        for photo_data in updated_gallery_data:
+            new_photo = Photo.objects.get_or_create(url=photo_data['url'])[0].id
+            new_gallery.append(new_photo)
+
+        new_styles = []
+        for style_data in updated_style_data:
+            new_photo = Style.objects.get(title=style_data['title']).id
+            new_styles.append(new_photo)
+
+        new_colors = []
+        for color_data in updated_colors_data:
+            new_color = Palette.objects.get(title=color_data['title']).id
+            new_colors.append(new_color)
+
+        new_materials = []
+        for material_data in updated_materials_data:
+            new_material = Material.objects.get(title=material_data['title']).id
+            new_materials.append(new_material)
+
+        instance.gallery.set(new_gallery)
+        instance.styles.set(new_styles)
+        instance.colors.set(new_colors)
+        instance.materials.set(new_materials)
+        instance.handle = Handle.objects.get(title=updated_handle_data['title'])
+        instance.main_style = Style.objects.get(title=updated_main_style_data['title'])
 
         instance.save()
-
-        for attr, value in m2m_fields:
-            for i in value:
-                for k, v in i.items():
-                    match attr:
-                        case 'gallery':
-                            instance.gallery.add(Photo.objects.get_or_create(url=v)[0].id)
-                        case 'styles':
-                            instance.styles.add(Style.objects.get(title=v))
-                        case 'colors':
-                            instance.colours.add(Palette.objects.get(title=v))
-                        case 'materials':
-                            instance.materials.add(Material.objects.get(title=v))
 
         return instance

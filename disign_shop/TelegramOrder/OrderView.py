@@ -10,10 +10,5 @@ class OrderView(APIView):
 
     def post(self, request):
         message = request.data['message']
-        if request.data['user']:
-            user = request.user
-            send_telegram("User: " + user.username + "\n" + message)
-            return Response(status=200)
-        else:
-            send_telegram(message)
-            return Response(status=200)
+        send_telegram(message)
+        return Response(status=200)
