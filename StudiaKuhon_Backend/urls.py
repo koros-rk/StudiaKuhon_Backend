@@ -24,7 +24,7 @@ router.register(r'furniture/photos', FurniturePhotoViewSet, basename='photos')
 router.register(r'furniture/colors', FurnitureColorViewSet, basename='colors')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/v1/admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('api/v1/order', OrderView.as_view()),
     path('api/v1/auth', include('rest_framework.urls')),

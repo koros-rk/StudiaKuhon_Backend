@@ -1,9 +1,11 @@
 from django.db.models import Q
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
 
+from ..filters import FurnitureFilter
 from ..models import Furniture
 from ..serializers import FurnitureSerializer
 from ..pagination import SetPaginationFurniture
@@ -14,6 +16,8 @@ class FurnitureViewSet(viewsets.ModelViewSet):
     serializer_class = FurnitureSerializer
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
     pagination_class = SetPaginationFurniture
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = FurnitureFilter
 
     def get_queryset(self):
         queryset = Furniture.objects.all().filter(show=True)

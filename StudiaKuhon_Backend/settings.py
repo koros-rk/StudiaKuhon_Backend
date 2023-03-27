@@ -3,7 +3,7 @@ from decouple import config
 from pathlib import Path
 
 # Telegram token
-TOKEN = os.getenv('telegram_token')
+TOKEN = os.getenv('TELEGRAM_TOKEN')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'StudiaKuhon_Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("DB_NAME", 'StudiaKuhon'),
+        'NAME': os.getenv("DB_NAME"),
         'USER': os.getenv('DB_USER', 'postgres'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST', 'localhost'),
